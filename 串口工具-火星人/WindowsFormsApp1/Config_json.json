@@ -1,0 +1,27 @@
+﻿{
+	"Serial_config": {
+		"intBaudRate": 115200,
+		"intDataBits": 8,
+		"intStopBits": 1,
+		"intParity": "none"
+	},
+	"Command_config": {
+		"intFrameSequential": 2,
+		"strFrameCheckCode": "",
+		"strFrameHead": "",
+		"strFrameTail": ""
+	},
+	"Command_name": {
+		"strOther": "",
+		"strHeadName": "",
+		"strSequentialName": "",
+		"strCommandName": "",
+		"strDataName": "",
+		"strCheckName": "",
+		"strTailName": "",
+		"strOtherOne": "",
+		"strOtherTwo": "",
+		"strOtherThree": "",
+		"strOtherFour": ""
+	}
+}
