@@ -590,8 +590,7 @@ namespace WindowsFormsApp1
                 if (com_content == null)
                 {
                     continue;
-                }
-                Thread.Sleep(2000);//等待2s时间等接收完成                
+                }                                
                 //根据报文 报头 分割收到的数据存在数组receive_arr内
                 string[] receive_arr = com_content.Split(new[] { strFrameHead.ToUpper() }, StringSplitOptions.RemoveEmptyEntries);
                 List<string> receive_list = new List<string>();//初始化一个列表存放完整的接收报文                
@@ -1091,6 +1090,7 @@ namespace WindowsFormsApp1
                         this.listView1.Columns.Clear();
                         Listview_Columns_add(this.listView1, lt);
                         th.Start();
+                        Thread.Sleep(2000);//等待2s时间等接收完成
                         th_log.Start();
                     }
                     else if (this.button5.Text == "停止测试")
