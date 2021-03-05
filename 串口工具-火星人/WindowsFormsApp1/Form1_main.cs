@@ -285,14 +285,12 @@ namespace WindowsFormsApp1
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardInput = true;
             p.StartInfo.CreateNoWindow = true;
-
             p.StartInfo.Arguments = mode + " " + data;
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
             // Console.Write(output);
-            p.Close();
-            Console.WriteLine("output.Length:" + output.Replace("\r\n", "").Length);
+            p.Close();            
             switch (output.Replace("\r\n", "").Length)
             {
                 case 0:
@@ -307,8 +305,7 @@ namespace WindowsFormsApp1
                 case 3:
                     output = "0" + output;
                     break;
-            }
-            Console.WriteLine("output:" + output);
+            }            
             return output;
         }
 
@@ -372,7 +369,7 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="box"></param>
         /// <returns></returns>
-        private static string Out_transform(ComboBox box)
+        private static string Out_transform(List<string> box)
         {
             //初始化转换输出的字符串
             string outdata = "";
@@ -385,13 +382,16 @@ namespace WindowsFormsApp1
             int com_index1 = 0;
             for (int i = 0; i < listview_name.Count; i++)
             {
+                if (canstop_create)
+                    break;
                 if (listview_value[i] != null && listview_name[i] != "校验" && listview_name[i] != "时序")
                 {
                     if (listview_value[i] != "" && listview_value[i] != "请输入..")
                         outdata += listview_value[i];
                     else
                     {
-                        outdata += box.Items[com_index].ToString().Split(' ')[1];
+                        //outdata += box.Items[com_index].ToString().Split(' ')[1];
+                        outdata += box[com_index].Split(' ')[1];
                         com_index += 1;
                     }
                 }
@@ -405,6 +405,8 @@ namespace WindowsFormsApp1
                 {                    
                     for (int j = 0; j < listview_check_value.Count; j++)
                     {
+                        if (canstop_create)
+                            break;
                         if (listview_check_value[j] != null && listview_name[j] == "时序")
                         {
                             if (sq_number == null)
@@ -413,7 +415,8 @@ namespace WindowsFormsApp1
                         }
                         else if (listview_check_value[j] == "" || listview_check_value[j] == "请输入..")
                         {
-                            pydata += box.Items[com_index1].ToString().Split(' ')[1];
+                            //pydata += box.Items[com_index1].ToString().Split(' ')[1];
+                            pydata += box[com_index1].Split(' ')[1];
                             com_index1 += 1;
                         }
                         else if (listview_check_value[j] != null)
@@ -482,6 +485,7 @@ namespace WindowsFormsApp1
             }
             lv.Items.Add(lvi);
             lv.EndUpdate();
+            lv.Items[lv.Items.Count - 1].EnsureVisible();
         }
 
         /// <summary>
@@ -787,6 +791,7 @@ namespace WindowsFormsApp1
                     canstop_test = true;//关闭窗体的话主动关闭 开始测试 的线程
                     canstop_case = true;//关闭窗体的话主动关闭 生成用例 的线程
                     canstop_log = true;//关闭窗体的话主动关闭 打印log 的线程
+                    canstop_create = true;//关闭窗体的话主动关闭 生成报文 的线程
                     this.serialPort1.DiscardInBuffer();
                     this.serialPort1.Close();
                 }
@@ -806,14 +811,36 @@ namespace WindowsFormsApp1
             Write_data(this.richTextBox1.Text);
         }
 
+        private List<string> input = new List<string>();
+        private static bool canstop_create = false;
+
+        /// <summary>
+        /// 新建生成的线程
+        /// </summary>
+        private void thread_create()
+        {          
+            string output;
+            output = Out_transform(input);           
+            this.BeginInvoke(new MethodInvoker(delegate
+            {
+                this.richTextBox1.Text = output;
+            }));
+        }
+
         /// <summary>
         /// 生成按钮：点击把textbox1内容转换成需要的报文，写入到richbox1内等待发送
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
-        {
-            this.richTextBox1.Text = Out_transform(this.comboBox2);
+        {         
+            for(int i=0;i<this.comboBox2.Items.Count;i++)
+            {
+                input.Add(this.comboBox2.Items[i].ToString());
+            }
+            Thread th1 = new Thread(thread_create);
+            canstop_create = false;
+            th1.Start();
         }
 
         /// <summary>
@@ -1290,6 +1317,17 @@ namespace WindowsFormsApp1
                 this.splitContainer1.Panel1Collapsed = false;//平时打印区域显示
                 this.splitContainer1.Panel2Collapsed = true;//测试打印区域隐藏
             }
+        }
+
+        /// <summary>
+        /// 日常打印的窗口有更新时候，滚动条始终在最后一行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+            richTextBox2.SelectionStart = richTextBox2.TextLength;
+            richTextBox2.ScrollToCaret();
         }
 
         /// <summary>
