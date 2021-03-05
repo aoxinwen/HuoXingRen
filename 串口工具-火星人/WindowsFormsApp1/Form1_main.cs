@@ -464,6 +464,22 @@ namespace WindowsFormsApp1
                     lvi.SubItems.Add(list[i]);
                 }
             }
+            if (list.Contains("fail"))
+            {
+                lvi.BackColor = Color.Red;
+                for (int i =0; i<lvi.SubItems.Count;i++)
+                {
+                    lvi.SubItems[i].BackColor = Color.LightPink;
+                }
+            }
+            if (list.Contains("pass"))
+            {
+                lvi.BackColor = Color.Green;
+                for (int i = 0; i < lvi.SubItems.Count; i++)
+                {
+                    lvi.SubItems[i].BackColor = Color.LightGreen;
+                }
+            }
             lv.Items.Add(lvi);
             lv.EndUpdate();
         }
@@ -483,10 +499,11 @@ namespace WindowsFormsApp1
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Open_serial();
-            }            
-            this.splitContainer1.Panel2Collapsed = true;   //命令窗口默认隐藏
-            this.aSCIIToolStripMenuItem.Checked = true;    //默认ASCII接收
-            this.aSCIIToolStripMenuItem1.Checked = true;   //默认ASCII发送
+            }           
+            this.splitContainer2.Panel2Collapsed = true;//命令窗口区域默认隐藏*/
+            this.splitContainer1.Panel2Collapsed = true;//测试打印区域默认隐藏           
+            this.hEX接收ToolStripMenuItem.Checked = true;    //默认ASCII接收
+            this.hEX发送ToolStripMenuItem.Checked = true;   //默认ASCII发送
             this.comboBox2.DropDownStyle = ComboBoxStyle.DropDownList; //默认不可输入
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;//默认不可输入
             comboBox1.Items.Add("请添加...");
@@ -513,8 +530,7 @@ namespace WindowsFormsApp1
             {
                 //打开串口
                 Open_serial();
-            }
-            
+            }           
         }
 
         /// <summary>
@@ -557,11 +573,14 @@ namespace WindowsFormsApp1
         private void 串口设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2_serialSET dlg = new Form2_serialSET();
-            dlg.ShowDialog();
-            /*if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
-
-            }*/
+                if (this.serialPort1.IsOpen)
+                {
+                    this.serialPort1.Close();
+                    Open_serial();
+                }
+            }
         }
 
         /// <summary>
@@ -585,12 +604,13 @@ namespace WindowsFormsApp1
         /// </summary>
         private void thread_log()
         {
-            while(!canstop_log)
+            Thread.Sleep(2000);//等待2s时间等接收完成
+            while (!canstop_log)
             {                
                 if (com_content == null)
                 {
                     continue;
-                }                                
+                }                
                 //根据报文 报头 分割收到的数据存在数组receive_arr内
                 string[] receive_arr = com_content.Split(new[] { strFrameHead.ToUpper() }, StringSplitOptions.RemoveEmptyEntries);
                 List<string> receive_list = new List<string>();//初始化一个列表存放完整的接收报文                
@@ -656,7 +676,10 @@ namespace WindowsFormsApp1
                         {
                             if (test_time == num_times)
                             {
-                                canstop_log = true;                         
+                                canstop_log = true;
+                                this.BeginInvoke(new MethodInvoker(delegate {
+                                    this.button5.Text = "完成测试";
+                                }));
                             }
                             else
                                 test_time += 1;
@@ -696,8 +719,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void 命令窗口ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;//弹出命令窗口
-            this.splitContainer2.Panel1Collapsed = true; //隐藏测试打印窗口
+            this.splitContainer2.Panel2Collapsed = !this.splitContainer2.Panel2Collapsed;
         }
 
         /// <summary>
@@ -1049,13 +1071,13 @@ namespace WindowsFormsApp1
                     break;
             }
             //循环完成后托管button7显示发送
-            if (!canstop_test)
+            /*if (!canstop_test)
             {
                 this.BeginInvoke(new MethodInvoker(delegate
                 {
                     this.button5.Text = "开始测试";
                 }));
-            }
+            }*/
         }
 
         /// <summary>
@@ -1067,9 +1089,7 @@ namespace WindowsFormsApp1
         {      
             
             if (this.textBox4.Text != null && this.textBox4.Text != "")
-            {
-                this.splitContainer1.Panel1Collapsed = !this.splitContainer1.Panel1Collapsed;
-                this.splitContainer2.Panel1Collapsed = !splitContainer2.Panel1Collapsed;
+            {                
                 try
                 {
                     time = Convert.ToInt32(this.textBox6.Text);
@@ -1078,7 +1098,9 @@ namespace WindowsFormsApp1
                     Thread th = new Thread(Thread_beginTest);
                     Thread th_log = new Thread(thread_log);
                     if (this.serialPort1.IsOpen && this.button5.Text == "开始测试")
-                    {
+                    {                        
+                        this.splitContainer1.Panel1Collapsed = true; //隐藏平时打印窗口
+                        this.splitContainer1.Panel2Collapsed = false;//显示测试打印区域
                         test_time = 1;  //当前循环次数
                         this.button5.Text = "停止测试";
                         this.button7.Enabled = false; //测试期间，发送按钮不可用
@@ -1089,8 +1111,7 @@ namespace WindowsFormsApp1
                         this.listView1.Items.Clear();
                         this.listView1.Columns.Clear();
                         Listview_Columns_add(this.listView1, lt);
-                        th.Start();
-                        Thread.Sleep(2000);//等待2s时间等接收完成
+                        th.Start();                        
                         th_log.Start();
                     }
                     else if (this.button5.Text == "停止测试")
@@ -1101,7 +1122,16 @@ namespace WindowsFormsApp1
                         canstop_log = true;//线程th_log停止
                         th.Abort();//释放线程th资源
                         th_log.Abort();
-                    }                   
+                    }
+                    else if (this.button5.Text == "完成测试")
+                    {                                        
+                        this.button5.Text = "开始测试";
+                        this.button7.Enabled = true;
+                        canstop_test = true;//线程th停止    
+                        canstop_log = true;//线程th_log停止
+                        th.Abort();//释放线程th资源
+                        th_log.Abort();
+                    }
                     else
                     {
                         canstop_test = true;//线程th停止    
@@ -1239,6 +1269,27 @@ namespace WindowsFormsApp1
                     this.button7.Text = "发送";
                 }));
             }                     
+        }
+        
+        /// <summary>
+        /// 鼠标双击菜单栏事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuStrip1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            //如果平时打印区域显示，鼠标双击后如下
+            if (this.splitContainer1.Panel1Collapsed == false)
+            {
+                this.splitContainer1.Panel1Collapsed = true;//平时打印区域隐藏
+                this.splitContainer1.Panel2Collapsed = false;//测试打印区域显示
+            }
+            //如果平时打印区域隐藏，鼠标双击后如下
+            else
+            {
+                this.splitContainer1.Panel1Collapsed = false;//平时打印区域显示
+                this.splitContainer1.Panel2Collapsed = true;//测试打印区域隐藏
+            }
         }
 
         /// <summary>
