@@ -833,7 +833,8 @@ namespace WindowsFormsApp1
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
-        {         
+        {
+            input.Clear();
             for(int i=0;i<this.comboBox2.Items.Count;i++)
             {
                 input.Add(this.comboBox2.Items[i].ToString());
