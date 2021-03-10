@@ -92,6 +92,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.属性设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -139,7 +140,7 @@
             // 
             this.新建连接ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.新建连接ToolStripMenuItem.Name = "新建连接ToolStripMenuItem";
-            this.新建连接ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.新建连接ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.新建连接ToolStripMenuItem.Text = "新建连接";
             this.新建连接ToolStripMenuItem.Click += new System.EventHandler(this.新建连接ToolStripMenuItem_Click);
             // 
@@ -151,7 +152,7 @@
             this.关闭日志ToolStripMenuItem});
             this.日志ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.日志ToolStripMenuItem.Name = "日志ToolStripMenuItem";
-            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.日志ToolStripMenuItem.Text = "日志";
             // 
             // 打开日志ToolStripMenuItem
@@ -176,7 +177,7 @@
             // 
             this.断开连接ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.断开连接ToolStripMenuItem.Name = "断开连接ToolStripMenuItem";
-            this.断开连接ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.断开连接ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.断开连接ToolStripMenuItem.Text = "断开连接";
             this.断开连接ToolStripMenuItem.Click += new System.EventHandler(this.断开连接ToolStripMenuItem_Click);
             // 
@@ -184,7 +185,7 @@
             // 
             this.退出ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -192,7 +193,7 @@
             // 
             this.全部退出ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.全部退出ToolStripMenuItem.Name = "全部退出ToolStripMenuItem";
-            this.全部退出ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.全部退出ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.全部退出ToolStripMenuItem.Text = "全部退出";
             // 
             // 编辑ToolStripMenuItem
@@ -273,7 +274,8 @@
             this.aSCIIToolStripMenuItem,
             this.aSCIIToolStripMenuItem1,
             this.aSCIIToolStripMenuItem2,
-            this.rn发送ToolStripMenuItem});
+            this.rn发送ToolStripMenuItem,
+            this.属性设置ToolStripMenuItem});
             this.设置ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
             this.设置ToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
@@ -283,7 +285,7 @@
             // 
             this.串口设置ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.串口设置ToolStripMenuItem.Name = "串口设置ToolStripMenuItem";
-            this.串口设置ToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.串口设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.串口设置ToolStripMenuItem.Text = "串口设置";
             this.串口设置ToolStripMenuItem.Click += new System.EventHandler(this.串口设置ToolStripMenuItem_Click);
             // 
@@ -291,7 +293,7 @@
             // 
             this.报文设置ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.报文设置ToolStripMenuItem.Name = "报文设置ToolStripMenuItem";
-            this.报文设置ToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.报文设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.报文设置ToolStripMenuItem.Text = "报文设置";
             this.报文设置ToolStripMenuItem.Click += new System.EventHandler(this.报文设置ToolStripMenuItem_Click);
             // 
@@ -299,21 +301,21 @@
             // 
             this.终端设置ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.终端设置ToolStripMenuItem.Name = "终端设置ToolStripMenuItem";
-            this.终端设置ToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.终端设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.终端设置ToolStripMenuItem.Text = "终端设置";
             // 
             // 字体设置ToolStripMenuItem
             // 
             this.字体设置ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.字体设置ToolStripMenuItem.Name = "字体设置ToolStripMenuItem";
-            this.字体设置ToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.字体设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.字体设置ToolStripMenuItem.Text = "字体设置";
             // 
             // hEX接收ToolStripMenuItem
             // 
             this.hEX接收ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.hEX接收ToolStripMenuItem.Name = "hEX接收ToolStripMenuItem";
-            this.hEX接收ToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.hEX接收ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.hEX接收ToolStripMenuItem.Text = "HEX接收";
             this.hEX接收ToolStripMenuItem.Click += new System.EventHandler(this.hEX接收ToolStripMenuItem_Click);
             // 
@@ -321,7 +323,7 @@
             // 
             this.hEX发送ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.hEX发送ToolStripMenuItem.Name = "hEX发送ToolStripMenuItem";
-            this.hEX发送ToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.hEX发送ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.hEX发送ToolStripMenuItem.Text = "HEX发送";
             this.hEX发送ToolStripMenuItem.Click += new System.EventHandler(this.hEX发送ToolStripMenuItem_Click);
             // 
@@ -329,7 +331,7 @@
             // 
             this.aSCIIToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
-            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.aSCIIToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.aSCIIToolStripMenuItem.Text = "ASCII接收";
             this.aSCIIToolStripMenuItem.Click += new System.EventHandler(this.aSCIIToolStripMenuItem_Click);
             // 
@@ -337,7 +339,7 @@
             // 
             this.aSCIIToolStripMenuItem1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.aSCIIToolStripMenuItem1.Name = "aSCIIToolStripMenuItem1";
-            this.aSCIIToolStripMenuItem1.Size = new System.Drawing.Size(150, 24);
+            this.aSCIIToolStripMenuItem1.Size = new System.Drawing.Size(180, 24);
             this.aSCIIToolStripMenuItem1.Text = "ASCII发送";
             this.aSCIIToolStripMenuItem1.Click += new System.EventHandler(this.aSCIIToolStripMenuItem1_Click);
             // 
@@ -346,14 +348,14 @@
             this.aSCIIToolStripMenuItem2.CheckOnClick = true;
             this.aSCIIToolStripMenuItem2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.aSCIIToolStripMenuItem2.Name = "aSCIIToolStripMenuItem2";
-            this.aSCIIToolStripMenuItem2.Size = new System.Drawing.Size(150, 24);
+            this.aSCIIToolStripMenuItem2.Size = new System.Drawing.Size(180, 24);
             this.aSCIIToolStripMenuItem2.Text = "NEWline接收";
             // 
             // rn发送ToolStripMenuItem
             // 
             this.rn发送ToolStripMenuItem.CheckOnClick = true;
             this.rn发送ToolStripMenuItem.Name = "rn发送ToolStripMenuItem";
-            this.rn发送ToolStripMenuItem.Size = new System.Drawing.Size(150, 24);
+            this.rn发送ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.rn发送ToolStripMenuItem.Text = "\\r\\n发送";
             // 
             // 帮助ToolStripMenuItem
@@ -705,6 +707,13 @@
             this.splitContainer2.SplitterDistance = 411;
             this.splitContainer2.TabIndex = 19;
             // 
+            // 属性设置ToolStripMenuItem
+            // 
+            this.属性设置ToolStripMenuItem.Name = "属性设置ToolStripMenuItem";
+            this.属性设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.属性设置ToolStripMenuItem.Text = "属性设置";
+            this.属性设置ToolStripMenuItem.Click += new System.EventHandler(this.属性设置ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -807,6 +816,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.ToolStripMenuItem 属性设置ToolStripMenuItem;
     }
 }
 

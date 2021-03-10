@@ -1022,11 +1022,14 @@ namespace WindowsFormsApp1
                         else
                             break;                        
                     }
-                    this.BeginInvoke(new MethodInvoker(delegate
+                    if (!canstop_case)
                     {
-                        this.button4.Text = "生成用例";
-                        this.progressBar1.Value = 100;
-                    }));
+                        this.BeginInvoke(new MethodInvoker(delegate
+                        {
+                            this.button4.Text = "生成用例";
+                            this.progressBar1.Value = 100;
+                        }));
+                    }                    
                 }
                 Close_excel();
             }             
@@ -1329,6 +1332,11 @@ namespace WindowsFormsApp1
         {
             richTextBox2.SelectionStart = richTextBox2.TextLength;
             richTextBox2.ScrollToCaret();
+        }
+
+        private void 属性设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         /// <summary>
