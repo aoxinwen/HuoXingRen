@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.IO.Ports;
+using NPOI.SS.UserModel;
 using static WindowsFormsApp1.Class1_json;
 using System.Diagnostics;
 using System.Threading;
@@ -39,6 +40,7 @@ namespace WindowsFormsApp1
         public static List<string> listview_value = new List<string>();          //listview里面显示的内容
         public static List<string> listview_check_value = new List<string>();    //listview里面内容需要校验的项
         public static List<string> listcombox2_value = new List<string>(new string[10]); //待添加的选项内容
+        public static List<string> listview_Serial_config = new List<string>();
 
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace WindowsFormsApp1
                         for (int i = 0; i < buff.Length; i++)
                         {
                             //把数字字符串转成16进制byte
-                            buff[i] = Convert.ToByte(hexstring.Substring(i * 2, 2), 16);                            
+                            buff[i] = Convert.ToByte(hexstring.Substring(i * 2, 2), 16);                         
                         }
                     }
                     catch (Exception e)
@@ -182,6 +184,7 @@ namespace WindowsFormsApp1
                 try
                 {
                     this.serialPort1.Write(buff, 0, buff.Length);
+                    MessageBox.Show("请检查文件路径", "提示", MessageBoxButtons.OK);
                     result = true;
                 }
                 catch (Exception e)
@@ -219,6 +222,30 @@ namespace WindowsFormsApp1
                 box.Text = null;
         }
 
+        private void Serial_put(List<string> list)
+        {
+            intBaudRate = int.Parse(list[0]);
+            intDataBits = int.Parse(list[1].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[0]);
+            if (list[2] == "1.5 bit")
+            {
+                intStopBits = StopBits.OnePointFive;
+            }
+            else
+            {
+                intStopBits = (StopBits)int.Parse(list[2].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[0]);
+            }
+            if (list[3] == "none")
+                intParity = Parity.None;
+            if (list[3] == "odd")
+                intParity = Parity.Odd;
+            if (list[3] == "even")
+                intParity = Parity.Even;
+            if (list[3] == "mark")
+                intParity = Parity.Mark;
+            if (list[3] == "space")
+                intParity = Parity.Space;
+        }
+
         /// <summary>
         /// 初始化json值
         /// </summary>
@@ -234,6 +261,8 @@ namespace WindowsFormsApp1
             //CheckCode_value
             listview_check_value = new List<string>(new string[] { my_Config.CheckCode_value.one, my_Config.CheckCode_value.two, my_Config.CheckCode_value.three, my_Config.CheckCode_value.four, my_Config.CheckCode_value.five, my_Config.CheckCode_value.six, my_Config.CheckCode_value.seven, my_Config.CheckCode_value.eight, my_Config.CheckCode_value.nine, my_Config.CheckCode_value.ten });
 
+            //导入串口数据
+            listview_Serial_config = new List<string>(new string[] { my_Config.Serial_config.intBaudRate, my_Config.Serial_config.intDataBits,my_Config.Serial_config.intParity,my_Config.Serial_config.intStopBits });
             //先清除comboBox2（需要用户自己添加的项）的内容
             this.comboBox2.Items.Clear();
             //如果选项名存在，而选项值为“”或者“请输入..”表示该项为用户自己输入
@@ -267,7 +296,10 @@ namespace WindowsFormsApp1
                 }
             }
             //需要手动添加的项值都添加到comboBox2内，并默认显示第一项
-            Combox_add(this.comboBox2, listcombox2_value);           
+            Combox_add(this.comboBox2, listcombox2_value);
+            //串口数据处理
+            Serial_put(listview_Serial_config);
+
         }
 
         /// <summary>
@@ -622,11 +654,11 @@ namespace WindowsFormsApp1
                 {                    
                     if (tent.EndsWith(strFrameTail.ToUpper()))
                     {
-                        receive_list.Add(strFrameHead.ToUpper() + tent);                                          
-                    }                   
+                        receive_list.Add(strFrameHead.ToUpper() + tent);
+                    }
                 }
 
-                //遍历所有excel（发送数据）的发送标志位（已经发送为1）
+                //遍历所有excel（发送数据）的发送标志位（已经发送几遍则为几）
                 for (int i = 1; i < case_content.GetLength(0); i++)
                 {
                     //Console.WriteLine("开始i:" + i);
@@ -634,7 +666,7 @@ namespace WindowsFormsApp1
                         break;
                     if (Convert.ToInt32(case_content[i, case_content.GetLength(1) - 2])  >= test_time && Convert.ToInt32(case_content[i, case_content.GetLength(1) - 1]) < test_time) //发送标志位是1的情况
                     {
-                        case_content[i, case_content.GetLength(1) - 1] = test_time.ToString();
+                        case_content[i, case_content.GetLength(1) - 1] = test_time.ToString();//接收标志位
                         List<string> _list = new List<string>(new string[7]);//显示在listview的内容
                                                                              //显示前5个数据                       
                         for (int j = 0; j < 5; j++)
@@ -651,13 +683,13 @@ namespace WindowsFormsApp1
                                 {                                    
                                     //如果时序号相同
                                     if (re_tent.Replace(" ", "").IndexOf(case_content[i, 5]) == Convert.ToInt32(case_content[i, 6]))
-                                    {                                        
+                                    {
                                         _list[5] = re_tent.Replace(" ", "");
                                         if (re_tent.Replace(" ", "") == case_content[i, 4])
                                         {
                                             _list[6] = "pass";
                                             //com_content=com_content.Replace(re_tent, "");
-                                            com_content = com_content.Remove(com_content.IndexOf(re_tent), re_tent.Length);                                            
+                                            com_content = com_content.Remove(com_content.IndexOf(re_tent), re_tent.Length);
                                             break;
                                         }
                                         else
@@ -1037,10 +1069,10 @@ namespace WindowsFormsApp1
 
         private string filepath;//初始化case路径
         private bool canstop_case = false;//生成用例的线程停止标志位
-        private bool canstop_test = false;//测试用例的线程停止标志位 
+        private bool canstop_test = false;//测试用例的线程停止标志位
         private bool canstop_log = false;//测试用例的线程停止标志位
         private string[,] case_content; //初始化一个多维数组存excel内容
-        private static int test_time;   //初始化case测试的当前次数      
+        private static int test_time;   //初始化case测试的当前次数
 
         /// <summary>
         /// 新建线程：生成用例的方法
@@ -1075,6 +1107,7 @@ namespace WindowsFormsApp1
                             {                               
                                 if (Get_cell(i, j))
                                 {
+                                    cell.SetCellType(CellType.String);
                                     case_content[i, j] = cell.StringCellValue.ToUpper();
                                 }                                
                             }
@@ -1118,8 +1151,8 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void button5_Click(object sender, EventArgs e)
         {      
-            
-            if (this.textBox4.Text != null && this.textBox4.Text != "")
+
+            if (this.textBox4.Text != null && this.textBox4.Text != "" && Directory.Exists(this.textBox4.Text))
             {                
                 try
                 {
@@ -1178,7 +1211,10 @@ namespace WindowsFormsApp1
                 }
             }
             else
+            {
                 MessageBox.Show("请检查文件路径", "提示", MessageBoxButtons.OK);
+                return;
+            }
         }
 
         /// <summary>
@@ -1204,7 +1240,12 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
-            filepath = this.textBox4.Text;            
+            filepath = this.textBox4.Text;
+            if (!Directory.Exists(filepath))
+            {
+                MessageBox.Show("请检查文件路径", "提示", MessageBoxButtons.OK);
+                return;
+            }
             Thread th = new Thread(Thread_testcase); 
             if (this.button4.Text == "生成用例")
             {

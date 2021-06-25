@@ -13,6 +13,7 @@ namespace WindowsFormsApp1
     class Class1_json
     {
         /// <summary>
+        /// 处理json配置文件
         /// 保存方式通用格式
         /// </summary>
         public class General_format

@@ -130,7 +130,7 @@ namespace WindowsFormsApp1
         {
             try
             {
-                cell = exsheet.GetRow(x).GetCell(y, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                cell = exsheet.GetRow(x).GetCell(y, MissingCellPolicy.CREATE_NULL_AS_BLANK);               
                 return true;
             }
             catch
